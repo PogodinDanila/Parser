@@ -1,10 +1,28 @@
+from datetime import date, timedelta, datetime
 
-import datetime
-
-MESSAGE = {'Status': 'Success',"Date":{"Day":None, "Month":None, "Year":None, "Hour":None, "Minute":None}, "Params":{"Day_of_week":None}}
+MESSAGE = {'Status': 'Success',"Date":{"Day":None, "Month":None, "Year":None, "Hour":None, "Minute":None}, "Params":{"Repeat_always":None}}
 text_i = input('Введите вашу строку: ')
 n = text_i.split()
 
+def vremy(text_i):
+    if ":" in text_i:
+        if (MESSAGE['Date']['Day'] == None):
+            next_hour = str(date.today())
+            next_hour = next_hour.split('-')
+            MESSAGE['Date']['Year'] = next_hour[0]
+            MESSAGE['Date']['Month'] = next_hour[1]
+            MESSAGE['Date']['Day'] = next_hour[2]
+        mins = text_i
+        ind = mins.index(':')
+        hours_1 = (mins.index(':')-2)
+        hours_2 = (mins.index(':')-1)
+        hours = str(mins[hours_1]) + str(mins[hours_2])
+        minutes = str(mins.split(':')[1])
+        MESSAGE['Date']['Hour']= hours
+        MESSAGE['Date']['Minute'] = minutes
+        text_i = text_i.split('в')
+        text_message = text_i[0]
+        MESSAGE['TEXT'] = text_message
 def text_vivod(n):
     stroka =""
     for i in range(len(n)):
@@ -95,13 +113,11 @@ def week_opred(n):
     if (int(putn) - t) <= 0:
         day_week = str((date.today() + timedelta(days=(7+(int(putn) - t)))))
     day_week = day_week.split('-')
-    print(day_week)
     MESSAGE['Date']['Year'] = day_week[0]
     MESSAGE['Date']['Month'] = day_week[1]
     MESSAGE['Date']['Day'] = day_week[2]
 
 def utro():
-    from datetime import date, datetime
     now_time = str(date.today())
     now_time = now_time.split('-')
     MESSAGE['Date']['Year'] = now_time[0]
@@ -112,8 +128,10 @@ def utro():
     current_time = current_time.split(':')
     MESSAGE["Date"]["Hour"] = '9'
     MESSAGE["Date"]["Minute"] = '00'
+    r = '9'
+    if (int(current_time[0]) - int(r)) > 0:
+        MESSAGE['Date']['Day'] = int(now_time[2]) + 1
 def denb():
-    from datetime import date, datetime
     now_time = str(date.today())
     now_time = now_time.split('-')
     MESSAGE['Date']['Year'] = now_time[0]
@@ -124,9 +142,11 @@ def denb():
     current_time = current_time.split(':')
     MESSAGE["Date"]["Hour"] = '12'
     MESSAGE["Date"]["Minute"] = '00'
+    r = '12'
+    if (int(current_time[0]) - int(r)) > 0:
+        MESSAGE['Date']['Day'] = int(now_time[2]) + 1
 
 def vecher():
-    from datetime import date, datetime
     now_time = str(date.today())
     now_time = now_time.split('-')
     MESSAGE['Date']['Year'] = now_time[0]
@@ -135,10 +155,13 @@ def vecher():
     now = datetime.now()
     current_time = str(now.strftime("%H:%M:%S"))
     current_time = current_time.split(':')
-    MESSAGE["Date"]["Hour"] = '17   '
+    MESSAGE["Date"]["Hour"] = '17'
     MESSAGE["Date"]["Minute"] = '00'
+    r = '17'
+    if (int(current_time[0])-int(r)) > 0:
+        MESSAGE['Date']['Day'] = int(now_time[2])+1
+
 def time_vsegda():
-    from datetime import date, datetime
     now = datetime.now()
     current_time = str(now.strftime("%H:%M:%S"))
     current_time = current_time.split(':')
@@ -147,52 +170,53 @@ def time_vsegda():
 
 if ('пятница' in n) or ('Friday' in n) or ('пятницу' in n):
     week_opred(n)
-    MESSAGE['Params']['Day_of_week'] = 'Friday'
+
     time_vsegda()
     t = n.remove('пятницу')
 
 
 if ('понедельник' in n) or ('Monday' in n):
     week_opred(n)
-    MESSAGE['Params']['Day_of_week'] = 'Monday'
+
     time_vsegda()
     t = n.remove('понедельник')
 
 if ('вторник' in n) or ('Thuesday' in n):
     week_opred(n)
-    MESSAGE['Params']['Day_of_week'] = 'Tuesday'
+
     time_vsegda()
     t = n.remove('вторник')
 
 if ('среда' in n) or ('среду' in n) or ('Wednesday' in n):
     week_opred(n)
-    MESSAGE['Params']['Day_of_week'] = 'Wednesday'
+
     time_vsegda()
     t = n.remove('среду')
+
 if ('четверг' in n) or ('Thursday' in n):
     week_opred(n)
-    MESSAGE['Params']['Day_of_week'] = 'Thursday'
+
     t = n.remove('четверг')
 if ('суббота' in n) or ('субботу' in n) or ('Saturday' in n):
     week_opred(n)
-    MESSAGE['Params']['Day_of_week'] = 'Saturday'
+
     time_vsegda()
     t = n.remove('субботу')
 if ('воскресенье' in n) or ('Sunday' in n):
     week_opred(n)
-    MESSAGE['Params']['Day_of_week'] = 'Sunday'
+
     time_vsegda()
     t = n.remove('воскресенье')
 
 
 
 
+
 u=0
-d=datetime.datetime.now()
+d=datetime.now()
 now_mnt = d.strftime("%m")
 now_day = d.strftime("%d")
 for i in n:
-    from datetime import date, timedelta, datetime
     g = n[u]
     if g.isdigit():
         if n[u+1] == 'февраля' or 'января' or 'октября' or 'марта' or 'апреля' or 'мая' or 'июня' or 'июля' or 'агуста' or 'сентября' or 'ноября' or 'декабря':
@@ -207,7 +231,6 @@ for i in n:
                 day_year = day_year.split('-')
                 MESSAGE['Date']['Year'] = day_year[0]
             if (MESSAGE["Date"]["Hour"] == None) and (MESSAGE["Date"]["Minute"] == None):
-                from datetime import date, datetime
 
                 now = datetime.now()
                 current_time = str(now.strftime("%H:%M:%S"))
@@ -236,7 +259,6 @@ if ('числа' in n) or ('числу' in n) or ('число' in n):
                 MESSAGE['Date']['Month'] = now_mnt
         j = j + 1
 if ('завтра' in n) or ('tomorrow' in n):
-    from datetime import date, timedelta, datetime
     tomorrow = str((date.today() + timedelta(days=1)))
     tomorrow = tomorrow.split('-')
     MESSAGE['Date']['Year'] = tomorrow[0]
@@ -271,7 +293,7 @@ elif ('через' in n) or ('следующей' in n) or ('следующий'
     if ('дня' in text_i) or ('дней' in text_i):
         u = 0
         for i in n:
-            from datetime import date, timedelta, datetime
+
             g = n[u]
             if g.isdigit():
                 now_time = str(date.today())
@@ -290,7 +312,6 @@ elif ('через' in n) or ('следующей' in n) or ('следующий'
 
 
     if ('неделю' in n):
-        from datetime import date, timedelta, datetime
         next_week = str((date.today() + timedelta(days=7)))
         next_week = next_week.split('-')
         MESSAGE['Date']['Year'] = next_week[0]
@@ -307,7 +328,7 @@ elif ('через' in n) or ('следующей' in n) or ('следующий'
     if ('недели' in n):
         u = 0
         for i in n:
-            from datetime import date, timedelta
+
             g = n[u]
             if g.isdigit() == True:
                 next_some_hour = str(date.today())
@@ -330,7 +351,7 @@ elif ('через' in n) or ('следующей' in n) or ('следующий'
 
 
     if ('час' in n) or ('60 минут' in n):
-        from datetime import date, timedelta, datetime
+
         next_hour = str(date.today())
         next_hour = next_hour.split('-')
         MESSAGE['Date']['Year'] = next_hour[0]
@@ -349,7 +370,7 @@ elif ('через' in n) or ('следующей' in n) or ('следующий'
     if ('год' in text_i) or ('года' in text_i):
         u = 0
         for i in n:
-            from datetime import date, timedelta
+
             g = n[u]
             if g.isdigit() == True:
                 next_some_hour = str((date.today() + timedelta(days=(365)*int(g))))
@@ -373,7 +394,6 @@ elif ('через' in n) or ('следующей' in n) or ('следующий'
     if ('часа' in text_i) or ('часов' in text_i):
         u = 0
         for i in n:
-            from datetime import date, timedelta
 
             g = n[u]
             if g.isdigit() == True:
@@ -398,7 +418,7 @@ elif ('через' in n) or ('следующей' in n) or ('следующий'
     elif ('минуты' in text_i) or ('минут' in text_i):
         u = 0
         for i in n:
-            from datetime import date, timedelta
+
             g = n[u]
             if g.isdigit() == True:
                 now_time = str(date.today())
@@ -428,7 +448,7 @@ if ('дня' in n) or ('днем' in n) or ('днём' in n):
     denb()
 if ":" in text_i:
     if (MESSAGE['Date']['Day'] == None):
-        from datetime import date, timedelta, datetime
+
         next_hour = str(date.today())
         next_hour = next_hour.split('-')
         MESSAGE['Date']['Year'] = next_hour[0]
@@ -449,81 +469,87 @@ if (MESSAGE['Date']['Day'] == None):
     MESSAGE['Status'] == 'Failure'
 
 if ('каждый' in n) or ('каждую' in n) or ('каждые' in n) or ('каждое' in n) or ('по' in n):
-    from datetime import date, timedelta, datetime
 
-    if ('пятница' in n) or ('Friday' in n) or ('пятницу' in n) or ('пятницам' in n):
-        week_opred(n)
+    if ('пятница' in text_i) or ('Friday' in text_i) or ('пятницу' in text_i) or ('пятницам' in text_i):
+
         MESSAGE['Params']['Day_of_week'] = 'Friday'
-        MESSAGE['Params']['Repeat_always'] = 'Friday'
+        MESSAGE['Params']['Repeat_always'] = 'Every Friday'
+        week_opred(n)
         if 'пятницам' in n:
             t = n.remove('пятницам')
         if 'пятницу' in n:
             t = n.remove('пятницу')
         text_vivod(n)
-    if ('понедельник' in n) or ('Monday' in n) or ('понедельникам' in n):
-        week_opred(n)
+    if ('понедельник' in text_i) or ('Monday' in text_i) or ('понедельникам' in text_i):
+
+        MESSAGE['Params']['Repeat_always'] = 'Every Monday'
         MESSAGE['Params']['Day_of_week'] = 'Monday'
-        MESSAGE['Params']['Repeat_always'] = 'Monday'
+        week_opred(n)
         if 'понедельник' in n:
             t = n.remove('понедельник')
         if 'понедельникам' in n:
             t = n.remove('понедельникам')
         text_vivod(n)
-    if ('вторник' in n) or ('Thuesday' in n) or ('вторникам' in n):
-        week_opred(n)
+    if ('вторник' in text_i) or ('Tuesday' in text_i) or ('вторникам' in text_i):
         MESSAGE['Params']['Day_of_week'] = 'Tuesday'
-        MESSAGE['Params']['Pereat_always'] = 'Tuesday'
+        MESSAGE['Params']['Repeat_always'] = 'Every Tuesday'
+        week_opred(n)
         if 'вторник' in n:
             t = n.remove('вторник')
         if 'вторникам' in n:
             t = n.remove('вторникам')
         text_vivod(n)
-    if ('среда' in n) or ('среду' in n) or ('Wednesday' in n) or ('средам' in n):
-        week_opred(n)
+    if ('среда' in text_i) or ('среду' in text_i) or ('Wednesday' in text_i) or ('средам' in text_i):
+
         MESSAGE['Params']['Day_of_week'] = 'Wednesday'
-        MESSAGE['Params']['Repeat_always'] = 'Wednesday'
+        MESSAGE['Params']['Repeat_always'] = 'Every Wednesday'
+        week_opred(n)
         if 'среду' in n:
             t = n.remove('среду')
         if 'средам' in n:
             t = n.remove('средам')
         text_vivod(n)
-    if ('четверг' in n) or ('Thursday' in n) or ('четвергам' in n):
-        week_opred(n)
+    if ('четверг' in text_i) or ('Thursday' in text_i) or ('четвергам' in text_i):
+
         MESSAGE['Params']['Day_of_week'] = 'Thursday'
-        MESSAGE['Params']['Repeat_always'] = 'Thursday'
+        MESSAGE['Params']['Repeat_always'] = 'Every Thursday'
+        week_opred(n)
         if 'четверг' in n:
             t = n.remove('четверг')
         if 'четвергам' in n:
             t = n.remove('четвергам')
         text_vivod(n)
-    if ('суббота' in n) or ('субботу' in n) or ('Saturday' in n) or ('субботам' in n):
-        week_opred(n)
+    if ('суббота' in text_i) or ('субботу' in text_i) or ('Saturday' in text_i) or ('субботам' in text_i):
+
+
         MESSAGE['Params']['Day_of_week'] = 'Saturday'
-        MESSAGE['Params']['Repeat_always'] = 'Saturday'
+        MESSAGE['Params']['Repeat_always'] = 'Every Saturday'
+        week_opred(n)
         if 'субботу' in n:
             t = n.remove('субботу')
         if 'субботам' in n:
             t = n.remove('субботам')
         text_vivod(n)
 
-    if ('воскресенье' in n) or ('Sunday' in n) or ('воскресеньям' in n):
-        week_opred(n)
+    if ('воскресенье' in text_i) or ('Sunday' in text_i) or ('воскресеньям' in text_i):
+
         MESSAGE['Params']['Day_of_week'] = 'Sunday'
-        MESSAGE['Params']['Repeat_always'] = 'Sunday'
+        MESSAGE['Params']['Repeat_always'] = 'Every Sunday'
+        week_opred(n)
         if 'воскресенье' in n:
             t = n.remove('воскресенье')
         if 'воскресеньям' in n:
             t = n.remove('воскресеньям')
         text_vivod(n)
-    if ('год' in n):
+    if ('год' in text_i):
         MESSAGE['Params']['Repeat_always'] = 'Every year'
-        from datetime import date, timedelta, datetime
+
         if 'год' in n:
             t = n.remove('год')
         text_vivod(n)
 
-    if ('день' in n):
-        from datetime import date, datetime
+    if ('день' in text_i):
+
         MESSAGE['Params']['Repeat_always'] = 'Every day'
         next_some_hour = str(date.today())
         next_some_hour = next_some_hour.split('-')
@@ -539,7 +565,7 @@ if ('каждый' in n) or ('каждую' in n) or ('каждые' in n) or ('
             t = n.remove('день')
         text_vivod(n)
 
-    if ('утром' in n) or ('утрам' in n) or ('утра' in n):
+    if ('утром' in text_i) or ('утрам' in text_i) or ('утра' in text_i):
         utro()
         if 'утрам' in n:
             t = n.remove('утрам')
@@ -547,7 +573,7 @@ if ('каждый' in n) or ('каждую' in n) or ('каждые' in n) or ('
             t = n.remove('утро')
         text_vivod(n)
         MESSAGE['Params']['Repeat_always'] = 'Every day'
-    if ('вечер' in n) or ('вечерам' in n):
+    if ('вечер' in text_i) or ('вечерам' in text_i):
         vecher()
         MESSAGE['Params']['Repeat_always'] = 'Every day'
         if 'вечерам' in n:
@@ -555,9 +581,26 @@ if ('каждый' in n) or ('каждую' in n) or ('каждые' in n) or ('
         if 'вечер' in n:
             t = n.remove('вечер')
         text_vivod(n)
-    if ('дня' in n) or ('днем' in n) or ('днём' in n):
-        denb()
+
+    if ('дня' in text_i) or ('дней' in text_i):
+        u = 0
         MESSAGE['Params']['Repeat_always'] = 'Every day'
+        for i in n:
+
+            g = n[u]
+            if g.isdigit():
+                now_time = str(date.today())
+                now_time = now_time.split('-')
+                MESSAGE['Date']['Year'] = now_time[0]
+                MESSAGE['Date']['Month'] = now_time[1]
+                MESSAGE['Date']['Day'] = int(now_time[2]) + int(g)
+                now = datetime.now()
+                current_time = str(now.strftime("%H:%M:%S"))
+                current_time = current_time.split(':')
+                MESSAGE["Date"]["Hour"] = current_time[0]
+                MESSAGE["Date"]["Minute"] = current_time[1]
+
+            u = u + 1
 
         next_year = str(date.today())
         next_year = next_year.split('-')
@@ -569,9 +612,32 @@ if ('каждый' in n) or ('каждую' in n) or ('каждые' in n) or ('
         current_time = current_time.split(':')
         MESSAGE["Date"]["Hour"] = current_time[0]
         MESSAGE["Date"]["Minute"] = current_time[1]
+    if ('часа' in text_i) or ('часов' in text_i):
+        MESSAGE['Params']['Repeat_always'] = 'Every a few hour'
+        u = 0
+        for i in n:
+            g = n[u]
+            if g.isdigit() == True:
+                next_some_hour = str(date.today())
+                next_some_hour = next_some_hour.split('-')
+                MESSAGE['Date']['Year'] = next_some_hour[0]
+                MESSAGE['Date']['Month'] = next_some_hour[1]
+                MESSAGE['Date']['Day'] = next_some_hour[2]
+                now = datetime.now()
+                current_time = str(now.strftime("%H:%M:%S"))
+                current_time = current_time.split(':')
+                MESSAGE["Date"]["Hour"] = int(current_time[0]) + int(g)
+                MESSAGE["Date"]["Minute"] = current_time[1]
+
+            u = u + 1
+        if 'часа' in n:
+            t = n.remove('часа')
+        if 'часов' in n:
+            t = n.remove('часов')
+        text_vivod(n)
     if ('час' in n):
         MESSAGE['Params']['Repeat_always'] = 'Every hour'
-        from datetime import date, timedelta, datetime
+
         next_year = str(date.today())
         next_year = next_year.split('-')
         MESSAGE['Date']['Year'] = int(next_year[0])
@@ -586,12 +652,44 @@ if ('каждый' in n) or ('каждую' in n) or ('каждые' in n) or ('
             t = n.remove('час')
 
         text_vivod(n)
-    if ('число' in n):
+    if ('число' in text_i):
         MESSAGE['Params']['Repeat_always'] = 'Every this day of the month'
+        u = 0
+        for i in n:
+            g = n[u]
+            if g.isdigit() == True:
+                next_some_hour = str(date.today())
+                next_some_hour = next_some_hour.split('-')
+                MESSAGE['Date']['Year'] = next_some_hour[0]
+                MESSAGE['Date']['Month'] = next_some_hour[1]
+                MESSAGE['Date']['Day'] = g
+                now = datetime.now()
+                current_time = str(now.strftime("%H:%M:%S"))
+                current_time = current_time.split(':')
+                MESSAGE["Date"]["Hour"] = int(current_time[0])
+                MESSAGE["Date"]["Minute"] = current_time[1]
+
+            u = u + 1
+
         if 'число' in n:
             t = n.remove('число')
         text_vivod(n)
 
+    if 'каждое' in n:
+        t = n.remove('каждое')
+    text_vivod(n)
+    if 'каждый' in n:
+        t = n.remove('каждый')
+    text_vivod(n)
+    if 'каждую' in n:
+        t = n.remove('каждую')
+    text_vivod(n)
+    if 'по' in n:
+        t = n.remove('по')
+    text_vivod(n)
+    if 'каждые' in n:
+        t = n.remove('каждые')
+    text_vivod(n)
 
     now = datetime.now()
     current_time = str(now.strftime("%H:%M:%S"))
@@ -602,7 +700,6 @@ if ('каждый' in n) or ('каждую' in n) or ('каждые' in n) or ('
 
 if ":" in text_i:
     if (MESSAGE['Date']['Day'] == None):
-        from datetime import date, timedelta, datetime
         next_hour = str(date.today())
         next_hour = next_hour.split('-')
         MESSAGE['Date']['Year'] = next_hour[0]
@@ -611,7 +708,6 @@ if ":" in text_i:
     mins = text_i
     ind = mins.index(':')
     hours_1 = (mins.index(':')-2)
-
     hours_2 = (mins.index(':')-1)
     hours = str(mins[hours_1]) + str(mins[hours_2])
     minutes = str(mins.split(':')[1])
@@ -624,7 +720,6 @@ if ":" in text_i:
 day_of_week = 'Wednesday or Thursday or Friday'
 if (' на неделе' in text_i):
     MESSAGE['Params']['Day_of_week'] = day_of_week
-    from datetime import date, timedelta, datetime
     next_hour = str(date.today())
     next_hour = next_hour.split('-')
     MESSAGE['Date']['Year'] = next_hour[0]
@@ -636,7 +731,6 @@ if (' на неделе' in text_i):
 
 
 
-#check()
 
 
 cifra = 0
@@ -649,4 +743,5 @@ for i in n:
 
 
 text_vivod(n)
+check()
 print(MESSAGE)
